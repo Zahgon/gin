@@ -1,17 +1,9 @@
-// Copyright 2014 Manu Martinez-Almeida. All rights reserved.
-// Use of this source code is governed by a MIT style
-// license that can be found in the LICENSE file.
-
 package render
 
 import (
-	"fmt"
 	"net/http"
-
-	"github.com/gin-gonic/gin/internal/bytesconv"
 )
 
-// String contains the given interface object slice and its format.
 type String struct {
 	Format string
 	Data   []any
@@ -19,23 +11,11 @@ type String struct {
 
 var plainContentType = []string{"text/plain; charset=utf-8"}
 
-// Render (String) writes data with custom ContentType.
-func (r String) Render(w http.ResponseWriter) error {
-	return WriteString(w, r.Format, r.Data)
-}
+func (r String) Render(w http.ResponseWriter) error { _ = "STUB: not implemented"; return nil }
 
-// WriteContentType (String) writes Plain ContentType.
-func (r String) WriteContentType(w http.ResponseWriter) {
-	writeContentType(w, plainContentType)
-}
+func (r String) WriteContentType(w http.ResponseWriter) { _ = "STUB: not implemented"; return }
 
-// WriteString writes data according to its format and write custom ContentType.
 func WriteString(w http.ResponseWriter, format string, data []any) (err error) {
-	writeContentType(w, plainContentType)
-	if len(data) > 0 {
-		_, err = fmt.Fprintf(w, format, data...)
-		return
-	}
-	_, err = w.Write(bytesconv.StringToBytes(format))
-	return
+	_ = "STUB: not implemented"
+	return nil
 }

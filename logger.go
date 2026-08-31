@@ -1,17 +1,10 @@
-// Copyright 2014 Manu Martinez-Almeida. All rights reserved.
-// Use of this source code is governed by a MIT style
-// license that can be found in the LICENSE file.
-
 package gin
 
 import (
 	"fmt"
 	"io"
 	"net/http"
-	"os"
 	"time"
-
-	"github.com/mattn/go-isatty"
 )
 
 type consoleColorModeValue int
@@ -35,135 +28,56 @@ const (
 
 var consoleColorMode = autoColor
 
-// LoggerConfig defines the config for Logger middleware.
 type LoggerConfig struct {
-	// Optional. Default value is gin.defaultLogFormatter
 	Formatter LogFormatter
 
-	// Output is a writer where logs are written.
-	// Optional. Default value is gin.DefaultWriter.
 	Output io.Writer
 
-	// SkipPaths is a URL path array which logs are not written.
-	// Optional.
 	SkipPaths []string
 
-	// SkipQueryString indicates that query strings should not be written
-	// for cases such as when API keys are passed via query strings.
-	// Optional. Default value is false.
 	SkipQueryString bool
 
-	// Skip is a Skipper that indicates which logs should not be written.
-	// Optional.
 	Skip Skipper
 }
 
-// Skipper is a function to skip logs based on provided Context
 type Skipper func(c *Context) bool
 
-// LogFormatter gives the signature of the formatter function passed to LoggerWithFormatter
 type LogFormatter func(params LogFormatterParams) string
 
-// LogFormatterParams is the structure any formatter will be handed when time to log comes
 type LogFormatterParams struct {
 	Request *http.Request
 
-	// TimeStamp shows the time after the server returns a response.
 	TimeStamp time.Time
-	// StatusCode is HTTP response code.
+
 	StatusCode int
-	// Latency is how much time the server cost to process a certain request.
+
 	Latency time.Duration
-	// ClientIP equals Context's ClientIP method.
+
 	ClientIP string
-	// Method is the HTTP method given to the request.
+
 	Method string
-	// Path is a path the client requests.
+
 	Path string
-	// ErrorMessage is set if error has occurred in processing the request.
+
 	ErrorMessage string
-	// isTerm shows whether gin's output descriptor refers to a terminal.
+
 	isTerm bool
-	// BodySize is the size of the Response Body
+
 	BodySize int
-	// Keys are the keys set on the request's context.
+
 	Keys map[any]any
 }
 
-// StatusCodeColor is the ANSI color for appropriately logging http status code to a terminal.
-func (p *LogFormatterParams) StatusCodeColor() string {
-	code := p.StatusCode
+func (p *LogFormatterParams) StatusCodeColor() string { _ = "STUB: not implemented"; return "" }
 
-	switch {
-	case code >= http.StatusContinue && code < http.StatusOK:
-		return white
-	case code >= http.StatusOK && code < http.StatusMultipleChoices:
-		return green
-	case code >= http.StatusMultipleChoices && code < http.StatusBadRequest:
-		return white
-	case code >= http.StatusBadRequest && code < http.StatusInternalServerError:
-		return yellow
-	default:
-		return red
-	}
-}
+func (p *LogFormatterParams) LatencyColor() string { _ = "STUB: not implemented"; return "" }
 
-// LatencyColor is the ANSI color for latency
-func (p *LogFormatterParams) LatencyColor() string {
-	latency := p.Latency
-	switch {
-	case latency < time.Millisecond*100:
-		return white
-	case latency < time.Millisecond*200:
-		return green
-	case latency < time.Millisecond*300:
-		return cyan
-	case latency < time.Millisecond*500:
-		return blue
-	case latency < time.Second:
-		return yellow
-	case latency < time.Second*2:
-		return magenta
-	default:
-		return red
-	}
-}
+func (p *LogFormatterParams) MethodColor() string { _ = "STUB: not implemented"; return "" }
 
-// MethodColor is the ANSI color for appropriately logging http method to a terminal.
-func (p *LogFormatterParams) MethodColor() string {
-	method := p.Method
+func (p *LogFormatterParams) ResetColor() string { _ = "STUB: not implemented"; return "" }
 
-	switch method {
-	case http.MethodGet:
-		return blue
-	case http.MethodPost:
-		return cyan
-	case http.MethodPut:
-		return yellow
-	case http.MethodDelete:
-		return red
-	case http.MethodPatch:
-		return green
-	case http.MethodHead:
-		return magenta
-	case http.MethodOptions:
-		return white
-	default:
-		return reset
-	}
-}
+func (p *LogFormatterParams) IsOutputColor() bool { _ = "STUB: not implemented"; return false }
 
-// ResetColor resets all escape attributes.
-func (p *LogFormatterParams) ResetColor() string {
-	return reset
-}
-
-// IsOutputColor indicates whether can colors be outputted to the log.
-func (p *LogFormatterParams) IsOutputColor() bool {
-	return consoleColorMode == forceColor || (consoleColorMode == autoColor && p.isTerm)
-}
-
-// defaultLogFormatter is the default log format function Logger middleware uses.
 var defaultLogFormatter = func(param LogFormatterParams) string {
 	var statusColor, methodColor, resetColor, latencyColor string
 	if param.IsOutputColor() {
@@ -193,122 +107,27 @@ var defaultLogFormatter = func(param LogFormatterParams) string {
 	)
 }
 
-// DisableConsoleColor disables color output in the console.
-func DisableConsoleColor() {
-	consoleColorMode = disableColor
-}
+func DisableConsoleColor() { _ = "STUB: not implemented"; return }
 
-// ForceConsoleColor force color output in the console.
-func ForceConsoleColor() {
-	consoleColorMode = forceColor
-}
+func ForceConsoleColor() { _ = "STUB: not implemented"; return }
 
-// ErrorLogger returns a HandlerFunc for any error type.
-func ErrorLogger() HandlerFunc {
-	return ErrorLoggerT(ErrorTypeAny)
-}
+func ErrorLogger() HandlerFunc { _ = "STUB: not implemented"; return *new(HandlerFunc) }
 
-// ErrorLoggerT returns a HandlerFunc for a given error type.
-func ErrorLoggerT(typ ErrorType) HandlerFunc {
-	return func(c *Context) {
-		c.Next()
-		errors := c.Errors.ByType(typ)
-		if len(errors) > 0 {
-			c.JSON(-1, errors)
-		}
-	}
-}
+func ErrorLoggerT(typ ErrorType) HandlerFunc { _ = "STUB: not implemented"; return *new(HandlerFunc) }
 
-// Logger instances a Logger middleware that will write the logs to gin.DefaultWriter.
-// By default, gin.DefaultWriter = os.Stdout.
-func Logger() HandlerFunc {
-	return LoggerWithConfig(LoggerConfig{})
-}
+func Logger() HandlerFunc { _ = "STUB: not implemented"; return *new(HandlerFunc) }
 
-// LoggerWithFormatter instance a Logger middleware with the specified log format function.
 func LoggerWithFormatter(f LogFormatter) HandlerFunc {
-	return LoggerWithConfig(LoggerConfig{
-		Formatter: f,
-	})
+	_ = "STUB: not implemented"
+	return *new(HandlerFunc)
 }
 
-// LoggerWithWriter instance a Logger middleware with the specified writer buffer.
-// Example: os.Stdout, a file opened in write mode, a socket...
 func LoggerWithWriter(out io.Writer, notlogged ...string) HandlerFunc {
-	return LoggerWithConfig(LoggerConfig{
-		Output:    out,
-		SkipPaths: notlogged,
-	})
+	_ = "STUB: not implemented"
+	return *new(HandlerFunc)
 }
 
-// LoggerWithConfig instance a Logger middleware with config.
 func LoggerWithConfig(conf LoggerConfig) HandlerFunc {
-	formatter := conf.Formatter
-	if formatter == nil {
-		formatter = defaultLogFormatter
-	}
-
-	out := conf.Output
-	if out == nil {
-		out = DefaultWriter
-	}
-
-	notlogged := conf.SkipPaths
-
-	isTerm := true
-
-	if w, ok := out.(*os.File); !ok || os.Getenv("TERM") == "dumb" ||
-		(!isatty.IsTerminal(w.Fd()) && !isatty.IsCygwinTerminal(w.Fd())) {
-		isTerm = false
-	}
-
-	var skip map[string]struct{}
-
-	if length := len(notlogged); length > 0 {
-		skip = make(map[string]struct{}, length)
-
-		for _, path := range notlogged {
-			skip[path] = struct{}{}
-		}
-	}
-
-	return func(c *Context) {
-		// Start timer
-		start := time.Now()
-		path := c.Request.URL.Path
-		raw := c.Request.URL.RawQuery
-
-		// Process request
-		c.Next()
-
-		// Log only when it is not being skipped
-		if _, ok := skip[path]; ok || (conf.Skip != nil && conf.Skip(c)) {
-			return
-		}
-
-		param := LogFormatterParams{
-			Request: c.Request,
-			isTerm:  isTerm,
-			Keys:    c.Keys,
-		}
-
-		// Stop timer
-		param.TimeStamp = time.Now()
-		param.Latency = param.TimeStamp.Sub(start)
-
-		param.ClientIP = c.ClientIP()
-		param.Method = c.Request.Method
-		param.StatusCode = c.Writer.Status()
-		param.ErrorMessage = c.Errors.ByType(ErrorTypePrivate).String()
-
-		param.BodySize = c.Writer.Size()
-
-		if raw != "" && !conf.SkipQueryString {
-			path = path + "?" + raw
-		}
-
-		param.Path = path
-
-		fmt.Fprint(out, formatter(param))
-	}
+	_ = "STUB: not implemented"
+	return *new(HandlerFunc)
 }

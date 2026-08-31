@@ -1,35 +1,16 @@
-// Copyright 2018 Gin Core Team. All rights reserved.
-// Use of this source code is governed by a MIT style
-// license that can be found in the LICENSE file.
-
 package binding
 
 import (
-	"bytes"
 	"io"
 	"net/http"
-
-	"github.com/goccy/go-yaml"
 )
 
 type yamlBinding struct{}
 
-func (yamlBinding) Name() string {
-	return "yaml"
-}
+func (yamlBinding) Name() string { _ = "STUB: not implemented"; return "" }
 
-func (yamlBinding) Bind(req *http.Request, obj any) error {
-	return decodeYAML(req.Body, obj)
-}
+func (yamlBinding) Bind(req *http.Request, obj any) error { _ = "STUB: not implemented"; return nil }
 
-func (yamlBinding) BindBody(body []byte, obj any) error {
-	return decodeYAML(bytes.NewReader(body), obj)
-}
+func (yamlBinding) BindBody(body []byte, obj any) error { _ = "STUB: not implemented"; return nil }
 
-func decodeYAML(r io.Reader, obj any) error {
-	decoder := yaml.NewDecoder(r)
-	if err := decoder.Decode(obj); err != nil {
-		return err
-	}
-	return validate(obj)
-}
+func decodeYAML(r io.Reader, obj any) error { _ = "STUB: not implemented"; return nil }
